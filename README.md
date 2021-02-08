@@ -6,9 +6,9 @@
 
 ### 사용 기술 스택
 
-- [ ] FLASK
-- [x] OPENCV-Python
-- [ ] AWS EC2
+- [ ] Flask
+- [x] OpenCV-Python
+- [ ] AWS-EC2
 
 ### 기능
 

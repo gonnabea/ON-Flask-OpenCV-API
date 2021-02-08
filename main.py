@@ -1,5 +1,6 @@
 import cv2
 import numpy
+from flask import stream_with_context, Response
 
 # 이미지 흑백 처리
 # testImg = cv2.imread("Resources/react-logo.png", 0)
@@ -12,9 +13,8 @@ import numpy
 # cv2.destroyAllWindows()
 
 # 동영상 흑백 처리
-
-def giveGrayEffect(video):
-    testCapture = cv2.VideoCapture(video)
+def giveGrayEffect(videoSrc):
+    testCapture = cv2.VideoCapture(videoSrc)
 
     while True:
         ret, frame = testCapture.read()
@@ -27,7 +27,22 @@ def giveGrayEffect(video):
         print(ret)
         grayVideo = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        cv2.imshow('frame', grayVideo)
+        # cv2.imshow('frame', grayVideo)
+
+
+        videoSize = (640, 480)
+        duration = 10
+        fps = 30
+        videoWriter = cv2.VideoWriter('grayVideo.avi', cv2.VideoWriter_fourcc(*'PIM1'), fps, (videoSize[1], videoSize[0]), False)
+        for _ in range(fps * duration):
+            data = numpy.random.randint(0, 256, videoSize, dtype='uint8')
+            videoWriter.write(data)
+
+            print(f"비디오데이터:{data}")
+            print(f"비디오:{data}")
+            return grayVideo
+
+
         if cv2.waitKey(1) == ord('q'):
             break
 

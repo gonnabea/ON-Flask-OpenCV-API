@@ -2,6 +2,7 @@ from flask import request, url_for
 from flask_api import FlaskAPI
 from main import giveGrayEffect
 
+
 app = FlaskAPI(__name__)
 
 @app.route("/", methods=['GET'])
@@ -11,7 +12,8 @@ def hello():
 
 @app.route("/gray-effect", methods=['GET'])
 def grayEffect():
-    giveGrayEffect("Resources/test_video.mp4")
+    videoSrc = "Resources/test_video.mp4"
+    giveGrayEffect(videoSrc)
 
 if __name__ == "__main__":
     app.run(debug=True)
