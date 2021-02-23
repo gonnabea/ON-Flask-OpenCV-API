@@ -6,7 +6,7 @@
 
 ### 사용 기술 스택
 
-- [ ] Flask
+- [x] Flask
 - [x] OpenCV-Python
 - [ ] AWS-EC2
 

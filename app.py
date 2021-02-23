@@ -1,7 +1,6 @@
-from flask import request, url_for
 from flask_api import FlaskAPI
-from main import giveGrayEffect
-
+from grayScreenEffect import giveGrayEffect
+from flask import stream_with_context, Response
 
 app = FlaskAPI(__name__)
 
@@ -11,9 +10,11 @@ def hello():
     return "welcome to my python server"
 
 @app.route("/gray-effect", methods=['GET'])
+
+
 def grayEffect():
     videoSrc = "Resources/test_video.mp4"
-    giveGrayEffect(videoSrc)
+    return Response(giveGrayEffect(videoSrc), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
     app.run(debug=True)
