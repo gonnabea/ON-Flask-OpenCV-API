@@ -1,8 +1,15 @@
 from flask_api import FlaskAPI
 from grayScreenEffect import giveGrayEffect
-from flask import stream_with_context, Response
+from flask import stream_with_context, Response, jsonify
+from flask_socketio import SocketIO
+from flask_cors import CORS, cross_origin
+
 
 app = FlaskAPI(__name__)
+cors = CORS(app)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app)
+
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -10,11 +17,23 @@ def hello():
     return "welcome to my python server"
 
 @app.route("/gray-effect", methods=['GET'])
-
-
 def grayEffect():
     videoSrc = "Resources/test_video.mp4"
     return Response(giveGrayEffect(videoSrc), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@socketio.on('connect')
+@cross_origin()
+def handle_connect():
+    response = jsonify(message="Flask socket server is running")
+    # Enable Access-Control-Allow-Origin
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+@socketio.on('videoStream')
+def handle_stream(image):
+    print(image)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+    socketio.run(app)
