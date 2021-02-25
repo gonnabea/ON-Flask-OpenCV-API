@@ -8,7 +8,7 @@ from flask_cors import CORS, cross_origin
 app = FlaskAPI(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins='*')
 
 
 @app.route("/", methods=['GET'])
@@ -24,13 +24,15 @@ def grayEffect():
 @socketio.on('connect')
 @cross_origin()
 def handle_connect():
+    print("새 유저가 소켓 접속을 요청하였습니다.")
     response = jsonify(message="Flask socket server is running")
     # Enable Access-Control-Allow-Origin
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
-@socketio.on('videoStream')
+@socketio.on('streamVideo')
 def handle_stream(image):
+    print("영상 재생 중")
     print(image)
 
 
