@@ -2,6 +2,11 @@ import time
 import cv2
 import numpy
 from flask import stream_with_context, Response
+from base64 import b64decode, b64encode
+from PIL import Image
+from base64 import decodestring
+from io import BytesIO
+
 
 # 이미지 흑백 처리
 # testImg = cv2.imread("Resources/react-logo.png", 0)
@@ -14,21 +19,20 @@ from flask import stream_with_context, Response
 # cv2.destroyAllWindows()
 
 # 동영상 흑백 처리
-def giveGrayEffect(videoSrc):
-    testCapture = cv2.VideoCapture(videoSrc)
+def giveGrayEffect(img_uri):
+    if img_uri:
+        img_uri = img_uri.split(',')[1]
 
-    while(testCapture.isOpened()):
+        img = b64decode(img_uri)
+        img = Image.open(BytesIO(img))
+        img = numpy.array(img)
+        imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        cv2.imshow("0", imgGray)
+        cv2.waitKey(0)
+        # imgGray, buffer = cv2.imencode('.jpg', imgGray)
+        # # jpg_as_text = base64.b64encode(buffer)
+        # cv2.imshow("gray",imgGray)
 
-        ret, img = testCapture.read()
-        if ret == True:
-            img = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
-            imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-            capture_frame = cv2.imencode('.jpg', imgGray)[1].tobytes()
-            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + capture_frame + b'\r\n') # 이게 뭣이여
-            time.sleep(1/65) # frame 지수 결정
-        else:
-            break
 
 
 

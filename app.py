@@ -5,12 +5,12 @@ from flask_socketio import SocketIO
 from flask_cors import CORS, cross_origin
 from engineio.payload import Payload
 
-Payload.max_decode_packets = 300
+Payload.max_decode_packets = 500
 
 app = FlaskAPI(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app, cors_allowed_origins='*', ping_timeout=5, ping_interval=0.1)
+socketio = SocketIO(app, cors_allowed_origins='*', ping_timeout=0, ping_interval=0)
 
 
 
@@ -35,12 +35,16 @@ def handle_connect():
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
-@socketio.on('streamVideo')
+@socketio.on('gray-video')
 @cross_origin()
-def handle_stream(image):
-    if(image):
+def handle_stream(image_base64):
+    if(image_base64):
         print("영상 base64 이미지 송신중...")
-    return "Flask socket server is running"
+        # socketio.emit('gray-video', "이미지 서버에서 받음")
+        # socketio.emit('gray-video',giveGrayEffect(image))
+        giveGrayEffect(image_base64)
+        return 'gray video is working...'
+
 
 
 if __name__ == "__main__":
