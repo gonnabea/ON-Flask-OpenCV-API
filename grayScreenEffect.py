@@ -30,8 +30,33 @@ def giveGrayEffect(img_uri):
         img = binascii.a2b_base64(img_uri)
         img = Image.open(BytesIO(img))
         img = numpy.array(img)
-        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        return b64encode(img_gray)
+        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # numpy.ndarray 타입 데이터 반환
+        print(type(img_gray))
+
+        def nparray_to_img():
+            # Reshape the array into a
+            # familiar resoluition
+            array = numpy.reshape(img_gray, (240, 240))
+
+            # show the shape of the array
+            print(array.shape)
+
+            # show the array
+            print(array)
+
+            # creating image object of
+            # above array
+            data = Image.fromarray(array)
+
+            # saving the final output
+            # as a PNG file
+            # data.save('gfg_dummy_pic.png')
+            fd = BytesIO()
+            data.save(fd, "png")
+            print(type(fd.getvalue()))
+            return fd.getvalue()
+
+        return nparray_to_img()
         # imgGray, buffer = cv2.imencode('.jpg', imgGray)
         # # jpg_as_text = base64.b64encode(buffer)
         # cv2.imshow("gray",imgGray)

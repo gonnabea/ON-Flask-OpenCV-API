@@ -1,4 +1,4 @@
-# ON-Flask-API
+# ON-Flask-OpenCV-API
 
 ### 간략 소개
 
@@ -9,7 +9,6 @@
 - [x] Flask
 - [x] Socket.io
 - [x] OpenCV-Python
-- [ ] Aiortc
 - [ ] AWS-EC2
 
 ### 기능
