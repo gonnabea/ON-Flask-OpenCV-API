@@ -1,4 +1,4 @@
-# ON-Python-API
+# ON-Flask-API
 
 ### 간략 소개
 
@@ -7,7 +7,9 @@
 ### 사용 기술 스택
 
 - [x] Flask
+- [x] Socket.io
 - [x] OpenCV-Python
+- [ ] Aiortc
 - [ ] AWS-EC2
 
 ### 기능

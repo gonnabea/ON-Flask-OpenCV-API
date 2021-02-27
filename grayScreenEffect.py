@@ -1,3 +1,4 @@
+import binascii
 import time
 import cv2
 import numpy
@@ -6,6 +7,8 @@ from base64 import b64decode, b64encode
 from PIL import Image
 from base64 import decodestring
 from io import BytesIO
+from flask_socketio import SocketIO
+
 
 
 # 이미지 흑백 처리
@@ -19,16 +22,16 @@ from io import BytesIO
 # cv2.destroyAllWindows()
 
 # 동영상 흑백 처리
+
+
 def giveGrayEffect(img_uri):
     if img_uri:
         img_uri = img_uri.split(',')[1]
-
-        img = b64decode(img_uri)
+        img = binascii.a2b_base64(img_uri)
         img = Image.open(BytesIO(img))
         img = numpy.array(img)
-        imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        cv2.imshow("0", imgGray)
-        cv2.waitKey(0)
+        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        return b64encode(img_gray)
         # imgGray, buffer = cv2.imencode('.jpg', imgGray)
         # # jpg_as_text = base64.b64encode(buffer)
         # cv2.imshow("gray",imgGray)
