@@ -31,18 +31,17 @@ def giveGrayEffect(img_uri):
         img = Image.open(BytesIO(img))
         img = numpy.array(img)
         img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # numpy.ndarray 타입 데이터 반환
-        print(type(img_gray))
 
         def nparray_to_img():
             # Reshape the array into a
             # familiar resoluition
             array = numpy.reshape(img_gray, (240, 240))
 
-            # show the shape of the array
-            print(array.shape)
-
-            # show the array
-            print(array)
+            # # show the shape of the array
+            # print(array.shape)
+            #
+            # # show the array
+            # print(array)
 
             # creating image object of
             # above array
@@ -53,7 +52,6 @@ def giveGrayEffect(img_uri):
             # data.save('gfg_dummy_pic.png')
             fd = BytesIO()
             data.save(fd, "png")
-            print(type(fd.getvalue()))
             return fd.getvalue()
 
         return nparray_to_img()

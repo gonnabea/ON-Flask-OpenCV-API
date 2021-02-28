@@ -4,13 +4,17 @@ from flask import stream_with_context, Response, jsonify
 from flask_socketio import SocketIO
 from flask_cors import CORS, cross_origin
 from engineio.payload import Payload
-
+import eventlet
+eventlet.monkey_patch()
 Payload.max_decode_packets = 10000
 
 app = FlaskAPI(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app, cors_allowed_origins='*', ping_timeout=100, ping_interval=10)
+
+
+socketio = SocketIO(app, cors_allowed_origins='https://our-now.herokuapp.com', ping_timeout=100, ping_interval=10000, async_mode='eventlet')
+
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -38,7 +42,5 @@ def handle_stream(image_base64):
         return 'gray video is working...'
 
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
-    socketio.run(app)
+if __name__ == '__main__':
+    socketio.run(app,debug=True)
