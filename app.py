@@ -4,6 +4,7 @@ from flask import stream_with_context, Response, jsonify
 from flask_socketio import SocketIO
 from flask_cors import CORS, cross_origin
 from engineio.payload import Payload
+from faceDetection import face_detection
 import eventlet
 eventlet.monkey_patch()
 Payload.max_decode_packets = 10000
@@ -28,19 +29,24 @@ def handle_connect():
     socketio.emit('connect-flask', "플라스크 socket.io 서버에 연결되었습니다.")
     response = jsonify(message="Flask socket server is running")
     # Enable Access-Control-Allow-Origin
-    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Origin", "https://our-now.herokuapp.com")
     return response
 
 @socketio.on('gray-video')
 @cross_origin()
 def handle_stream(image_base64):
     if(image_base64):
-        print("영상 base64 이미지 송신중...")
-        # socketio.emit('gray-video', "이미지 서버에서 받음")
-        # socketio.emit('gray-video',giveGrayEffect(image))
+        print("흑백화 모드")
         socketio.emit("gray-video",giveGrayEffect(image_base64))
         return 'gray video is working...'
 
+@socketio.on('face-detection')
+@cross_origin()
+def handle_stream(image_base64):
+    if(image_base64):
+        print("얼굴 인식 모드")
+        socketio.emit("face-detection",face_detection(image_base64))
+        return 'gray video is working...'
 
 if __name__ == '__main__':
     socketio.run(app,debug=True)

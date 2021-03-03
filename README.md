@@ -11,7 +11,7 @@
 - [x] OpenCV-Python
 - [ ] AWS-EC2
 
-### 기능
+### 기능 (APIs)
 
 - [x] 흑백 효과
 - [ ] 배경색 변경

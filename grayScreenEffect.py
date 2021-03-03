@@ -51,7 +51,7 @@ def giveGrayEffect(img_uri):
             # as a PNG file
             # data.save('gfg_dummy_pic.png')
             fd = BytesIO()
-            data.save(fd, "png")
+            data.save(fd, "webp")
             return fd.getvalue()
 
         return nparray_to_img()
