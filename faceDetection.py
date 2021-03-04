@@ -15,7 +15,7 @@ def face_detection(img_uri):
     face_cascade = cv2.CascadeClassifier('Resources/haarcascade_frontalface_default.xml')
 
 
-    faces = face_cascade.detectMultiScale(img,1.1,1) # the input image, scaleFactor and minNeighbours.
+    faces = face_cascade.detectMultiScale(img,1.2,1) # the input image, scaleFactor and minNeighbours.
 
     print(type(img))
     for(x,y,w,h) in faces:
@@ -24,13 +24,14 @@ def face_detection(img_uri):
         def nparray_to_img(img):
             # Reshape the array into a
             # familiar resoluition
-            array = numpy.reshape(img, (240, -1))
+            print(img.shape)
+            array = numpy.reshape(img, (240, 240, 3)) # width, height, color로 보임.
 
-            # # show the shape of the array
-            # print(array.shape)
-            #
-            # # show the array
-            # print(array)
+            # show the shape of the array
+            print(array.shape)
+
+            # show the array
+            print(array)
 
             # creating image object of
             # above array
@@ -43,4 +44,5 @@ def face_detection(img_uri):
             data.save(fd, "webp")
             return fd.getvalue()
         img = nparray_to_img(img)
-        return img
+        if img:
+            return img
