@@ -16,33 +16,34 @@ def face_detection(img_uri):
 
 
     faces = face_cascade.detectMultiScale(img,1.2,1) # the input image, scaleFactor and minNeighbours.
+    print(faces)
+    def nparray_to_img(img):
+        # Reshape the array into a
+        # familiar resoluition
+        # print(img.shape)
+        array = numpy.reshape(img, (240, 240, 3))  # width, height, color로 보임.
 
-    print(type(img))
-    for(x,y,w,h) in faces:
-        cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        # # show the shape of the array
+        # print(array.shape)
+        #
+        # # show the array
+        # print(array)
 
-        def nparray_to_img(img):
-            # Reshape the array into a
-            # familiar resoluition
-            print(img.shape)
-            array = numpy.reshape(img, (240, 240, 3)) # width, height, color로 보임.
+        # creating image object of
+        # above array
+        data = Image.fromarray(array)
 
-            # show the shape of the array
-            print(array.shape)
+        # saving the final output
+        # as a PNG file
+        # data.save('gfg_dummy_pic.png')
+        fd = BytesIO()
+        data.save(fd, "webp")
+        return fd.getvalue()
 
-            # show the array
-            print(array)
-
-            # creating image object of
-            # above array
-            data = Image.fromarray(array)
-
-            # saving the final output
-            # as a PNG file
-            # data.save('gfg_dummy_pic.png')
-            fd = BytesIO()
-            data.save(fd, "webp")
-            return fd.getvalue()
-        img = nparray_to_img(img)
-        if img:
-            return img
+    if len(faces) > 0:
+        for(x,y,w,h) in faces:
+            cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            img = nparray_to_img(img)
+        return img
+    else:
+        return nparray_to_img(img)
