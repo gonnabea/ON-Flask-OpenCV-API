@@ -15,7 +15,7 @@ def face_detection(img_uri):
     face_cascade = cv2.CascadeClassifier('Resources/haarcascade_frontalface_default.xml')
 
 
-    faces = face_cascade.detectMultiScale(img,1.2,1) # the input image, scaleFactor and minNeighbours.
+    faces = face_cascade.detectMultiScale(img,1.6,1) # the input image, scaleFactor and minNeighbours.
     print(faces)
     def nparray_to_img(img):
         # Reshape the array into a
@@ -40,10 +40,12 @@ def face_detection(img_uri):
         data.save(fd, "webp")
         return fd.getvalue()
 
+    # 얼굴이 검출될 시
     if len(faces) > 0:
         for(x,y,w,h) in faces:
             cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
             img = nparray_to_img(img)
         return img
+    # 얼굴이 검출되지 않았을 시
     else:
         return nparray_to_img(img)
