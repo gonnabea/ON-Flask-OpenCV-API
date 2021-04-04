@@ -5,6 +5,9 @@ from flask_socketio import SocketIO
 from flask_cors import CORS, cross_origin
 from engineio.payload import Payload
 from faceDetection import face_detection
+import eventlet
+
+eventlet.monkey_patch()
 
 
 Payload.max_decode_packets = 10000

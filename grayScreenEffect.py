@@ -8,6 +8,8 @@ from PIL import Image
 from base64 import decodestring
 from io import BytesIO
 from flask_socketio import SocketIO
+import threading
+
 
 
 
@@ -24,7 +26,13 @@ from flask_socketio import SocketIO
 # 동영상 흑백 처리
 
 
+
+
+
+
 def giveGrayEffect(img_uri):
+
+
     if img_uri:
         img_uri = img_uri.split(',')[1]
         img = binascii.a2b_base64(img_uri)

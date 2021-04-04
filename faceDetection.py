@@ -4,6 +4,8 @@ import numpy
 from PIL import Image
 from io import BytesIO
 
+
+
 def face_detection(img_uri):
     img_uri = img_uri.split(',')[1]
     img = binascii.a2b_base64(img_uri)
@@ -15,7 +17,7 @@ def face_detection(img_uri):
     face_cascade = cv2.CascadeClassifier('Resources/haarcascade_frontalface_default.xml')
 
 
-    faces = face_cascade.detectMultiScale(img,1.6,1) # the input image, scaleFactor and minNeighbours.
+    faces = face_cascade.detectMultiScale(img,1.7,1) # the input image, scaleFactor and minNeighbours.
     print(faces)
     def nparray_to_img(img):
         # Reshape the array into a
@@ -24,12 +26,12 @@ def face_detection(img_uri):
         array = numpy.reshape(img, (240, 240, 3))  # width, height, color로 보임.
 
         # # show the shape of the array
-        # print(array.shape)
         #
         # # show the array
         # print(array)
 
         # creating image object of
+        # print(array.shape)
         # above array
         data = Image.fromarray(array)
 
@@ -44,6 +46,13 @@ def face_detection(img_uri):
     if len(faces) > 0:
         for(x,y,w,h) in faces:
             cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+
+            # 얼굴에 붙일 이미지
+            image_for_face = cv2.imread('Resources/rabbit.jpg')
+            image_for_face = cv2.resize(image_for_face, (w, h))
+
+            img[y:y+h,x:x+w] = image_for_face # 순서가 x,y가 아닌 y,x로 반대인 이유는?
+
             img = nparray_to_img(img)
         return img
     # 얼굴이 검출되지 않았을 시
