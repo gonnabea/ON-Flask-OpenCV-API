@@ -4,8 +4,6 @@ import numpy
 from PIL import Image
 from io import BytesIO
 
-
-
 def face_detection(img_uri):
     img_uri = img_uri.split(',')[1]
     img = binascii.a2b_base64(img_uri)
@@ -17,7 +15,7 @@ def face_detection(img_uri):
     face_cascade = cv2.CascadeClassifier('Resources/haarcascade_frontalface_default.xml')
 
 
-    faces = face_cascade.detectMultiScale(img,1.7,1) # the input image, scaleFactor and minNeighbours.
+    faces = face_cascade.detectMultiScale(img,1.8,1) # the input image, scaleFactor and minNeighbours.
     print(faces)
     def nparray_to_img(img):
         # Reshape the array into a
@@ -40,6 +38,7 @@ def face_detection(img_uri):
         # data.save('gfg_dummy_pic.png')
         fd = BytesIO()
         data.save(fd, "webp")
+
         return fd.getvalue()
 
     # 얼굴이 검출될 시
@@ -54,7 +53,10 @@ def face_detection(img_uri):
             img[y:y+h,x:x+w] = image_for_face # 순서가 x,y가 아닌 y,x로 반대인 이유는?
 
             img = nparray_to_img(img)
+
         return img
     # 얼굴이 검출되지 않았을 시
     else:
+
         return nparray_to_img(img)
+

@@ -5,20 +5,24 @@ from flask_socketio import SocketIO
 from flask_cors import CORS, cross_origin
 from engineio.payload import Payload
 from faceDetection import face_detection
-import eventlet
-
-eventlet.monkey_patch()
+import threading
 
 
 Payload.max_decode_packets = 10000
 
 app = FlaskAPI(__name__)
 cors = CORS(app)
-app.config['SECRET_KEY'] = 'secret!'
+app.config['SECRET_KEY'] = "secret!"
 
 
-socketio = SocketIO(app, cors_allowed_origins='https://our-now.herokuapp.com', ping_timeout=100, ping_interval=10000, async_mode='eventlet')
+socketio = SocketIO(app, cors_allowed_origins='https://our-now.herokuapp.com', ping_timeout=100, logger=True, ping_interval=100000, async_mode='eventlet')
 
+myRabbitThread = threading.Thread()
+def my_rabbit_thread():
+    myRabbitThread = threading.Thread()
+    myRabbitThread.start()
+    print(myRabbitThread)
+    return myRabbitThread
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -33,6 +37,7 @@ def handle_connect():
     response = jsonify(message="Flask socket server is running")
     # Enable Access-Control-Allow-Origin
     response.headers.add("Access-Control-Allow-Origin", "https://our-now.herokuapp.com")
+    my_rabbit_thread()
     return response
 
 # 통화 상대의 영상 처리 효과를 위한 소켓 채널
