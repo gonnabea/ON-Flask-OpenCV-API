@@ -6,6 +6,7 @@ from flask_cors import CORS, cross_origin
 from engineio.payload import Payload
 from faceDetection import face_detection
 import threading
+from multiprocessing import Process, Queue
 
 
 Payload.max_decode_packets = 10000
@@ -76,3 +77,9 @@ def handle_stream(image_base64):
 
 if __name__ == '__main__':
     socketio.run(app,debug=True)
+def my_rabbit_effect():
+    queue = Queue()
+    p = Process(target=handle_stream, args=(queue,image_base64))
+    p.start()
+    p.join()
+    print(p)
