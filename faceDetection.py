@@ -3,8 +3,11 @@ import binascii
 import numpy
 from PIL import Image
 from io import BytesIO
+from multiprocessing import Pool, Queue
 
-def face_detection(img_uri):
+
+def excute_img_processing(img_uri):
+    print("토끼귀 이미지 프로세싱 진행중 (멀티프로세싱)")
     img_uri = img_uri.split(',')[1]
     img = binascii.a2b_base64(img_uri)
     img = Image.open(BytesIO(img))
@@ -14,8 +17,8 @@ def face_detection(img_uri):
     x = img_uri
     face_cascade = cv2.CascadeClassifier('Resources/haarcascade_frontalface_default.xml')
 
+    faces = face_cascade.detectMultiScale(img, 1.8, 1)  # the input image, scaleFactor and minNeighbours.
 
-    faces = face_cascade.detectMultiScale(img,1.8,1) # the input image, scaleFactor and minNeighbours.
     # print(faces)
     def nparray_to_img(img):
         # Reshape the array into a
@@ -40,17 +43,17 @@ def face_detection(img_uri):
         data.save(fd, "webp")
 
         return fd.getvalue()
-
+    print(len(faces))
     # 얼굴이 검출될 시
     if len(faces) > 0:
-        for(x,y,w,h) in faces:
-            cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        for (x, y, w, h) in faces:
+            cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
             # 얼굴에 붙일 이미지
             image_for_face = cv2.imread('Resources/rabbit.jpg')
             image_for_face = cv2.resize(image_for_face, (w, h))
 
-            img[y:y+h,x:x+w] = image_for_face # 순서가 x,y가 아닌 y,x로 반대인 이유는?
+            img[y:y + h, x:x + w] = image_for_face  # 순서가 x,y가 아닌 y,x로 반대인 이유는?
 
             img = nparray_to_img(img)
 
@@ -59,4 +62,15 @@ def face_detection(img_uri):
     else:
 
         return nparray_to_img(img)
+
+def face_detection(img_uri):
+    pool = Pool(processes=6)
+    result = pool.map(excute_img_processing,[img_uri])
+    print(result[0])
+    pool.close()
+    pool.join()
+
+    return result[0]
+
+
 

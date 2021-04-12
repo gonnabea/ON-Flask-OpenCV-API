@@ -61,7 +61,7 @@ def giveGrayEffect(img_uri):
             fd = BytesIO()
             data.save(fd, "webp")
             return fd.getvalue()
-
+        print(nparray_to_img())
         return nparray_to_img()
         # imgGray, buffer = cv2.imencode('.jpg', imgGray)
         # # jpg_as_text = base64.b64encode(buffer)
