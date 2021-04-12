@@ -11,12 +11,12 @@ def face_detection(img_uri):
     img = numpy.array(img)
     # img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # numpy.ndarray 타입 데이터 반환
 
-
+    x = img_uri
     face_cascade = cv2.CascadeClassifier('Resources/haarcascade_frontalface_default.xml')
 
 
     faces = face_cascade.detectMultiScale(img,1.8,1) # the input image, scaleFactor and minNeighbours.
-    print(faces)
+    # print(faces)
     def nparray_to_img(img):
         # Reshape the array into a
         # familiar resoluition

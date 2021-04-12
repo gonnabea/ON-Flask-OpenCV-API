@@ -5,9 +5,6 @@ from flask_socketio import SocketIO
 from flask_cors import CORS, cross_origin
 from engineio.payload import Payload
 from faceDetection import face_detection
-import threading
-from multiprocessing import Process, Queue
-
 
 Payload.max_decode_packets = 10000
 
@@ -18,12 +15,6 @@ app.config['SECRET_KEY'] = "secret!"
 
 socketio = SocketIO(app, cors_allowed_origins='https://our-now.herokuapp.com', ping_timeout=100, logger=True, ping_interval=100000, async_mode='eventlet')
 
-myRabbitThread = threading.Thread()
-def my_rabbit_thread():
-    myRabbitThread = threading.Thread()
-    myRabbitThread.start()
-    print(myRabbitThread)
-    return myRabbitThread
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -38,7 +29,6 @@ def handle_connect():
     response = jsonify(message="Flask socket server is running")
     # Enable Access-Control-Allow-Origin
     response.headers.add("Access-Control-Allow-Origin", "https://our-now.herokuapp.com")
-    my_rabbit_thread()
     return response
 
 # 통화 상대의 영상 처리 효과를 위한 소켓 채널
@@ -70,16 +60,10 @@ def handle_stream(image_base64):
 @socketio.on('my-face-detection')
 @cross_origin()
 def handle_stream(image_base64):
-    if(image_base64):
+    if (image_base64):
         print("나의 얼굴 인식 모드")
-        socketio.emit("my-face-detection",face_detection(image_base64))
+        socketio.emit("my-face-detection", face_detection(image_base64))
         return 'gray video is working...'
 
 if __name__ == '__main__':
     socketio.run(app,debug=True)
-def my_rabbit_effect():
-    queue = Queue()
-    p = Process(target=handle_stream, args=(queue,image_base64))
-    p.start()
-    p.join()
-    print(p)
