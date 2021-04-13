@@ -64,7 +64,6 @@ def handle_stream(image_base64):
     if (image_base64):
         print("나의 얼굴 인식 모드")
         socketio.emit("my-face-detection", face_detection(image_base64))
-        return 'gray video is working...'
-
+        return 'my rabbit is working...'
 if __name__ == '__main__':
     socketio.run(app,debug=True)

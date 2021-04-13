@@ -3,7 +3,33 @@ import binascii
 import numpy
 from PIL import Image
 from io import BytesIO
-from multiprocessing import Pool, Queue
+from multiprocessing import Pool
+
+
+
+def nparray_to_img(img):
+    # Reshape the array into a
+    # familiar resoluition
+    # print(img.shape)
+    array = numpy.reshape(img, (240, 240, 3))  # width, height, color로 보임.
+
+    # # show the shape of the array
+    #
+    # # show the array
+    # print(array)
+
+    # creating image object of
+    # print(array.shape)
+    # above array
+    data = Image.fromarray(array)
+
+    # saving the final output
+    # as a PNG file
+    # data.save('gfg_dummy_pic.png')
+    fd = BytesIO()
+    data.save(fd, "webp")
+
+    return fd.getvalue()
 
 
 def excute_img_processing(img_uri):
@@ -20,29 +46,7 @@ def excute_img_processing(img_uri):
     faces = face_cascade.detectMultiScale(img, 1.8, 1)  # the input image, scaleFactor and minNeighbours.
 
     # print(faces)
-    def nparray_to_img(img):
-        # Reshape the array into a
-        # familiar resoluition
-        # print(img.shape)
-        array = numpy.reshape(img, (240, 240, 3))  # width, height, color로 보임.
 
-        # # show the shape of the array
-        #
-        # # show the array
-        # print(array)
-
-        # creating image object of
-        # print(array.shape)
-        # above array
-        data = Image.fromarray(array)
-
-        # saving the final output
-        # as a PNG file
-        # data.save('gfg_dummy_pic.png')
-        fd = BytesIO()
-        data.save(fd, "webp")
-
-        return fd.getvalue()
     print(len(faces))
     # 얼굴이 검출될 시
     if len(faces) > 0:
@@ -64,9 +68,8 @@ def excute_img_processing(img_uri):
         return nparray_to_img(img)
 
 def face_detection(img_uri):
-    pool = Pool(processes=6)
+    pool = Pool(processes=2)
     result = pool.map(excute_img_processing,[img_uri])
-    print(result[0])
     pool.close()
     pool.join()
 
