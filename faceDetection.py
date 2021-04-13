@@ -64,15 +64,14 @@ def excute_img_processing(img_uri):
         return img
     # 얼굴이 검출되지 않았을 시
     else:
-
         return nparray_to_img(img)
 
-def face_detection(img_uri, pool):
-    print(type(pool))
+pool = None
+def face_detection(img_uri):
+    global pool
+    if(pool is None):
+        pool = Pool(processes=4)
     result = pool.map(excute_img_processing,[img_uri])
-    pool.close()
-    pool.join()
-
     return result[0]
 
 
