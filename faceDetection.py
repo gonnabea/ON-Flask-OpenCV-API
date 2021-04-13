@@ -67,8 +67,8 @@ def excute_img_processing(img_uri):
 
         return nparray_to_img(img)
 
-def face_detection(img_uri):
-    pool = Pool(processes=2)
+def face_detection(img_uri, pool):
+    print(type(pool))
     result = pool.map(excute_img_processing,[img_uri])
     pool.close()
     pool.join()
